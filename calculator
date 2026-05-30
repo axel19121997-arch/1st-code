@@ -1,0 +1,22 @@
+>>> nombre1 = float(input("Entrez le premier nombre : "))
+Entrez le premier nombre : 6
+>>> operation = input("Entrez l'opération (+, -, *, /) : ")
+Entrez l'opération (+, -, *, /) : *
+>>> nombre2 = float(input("Entrez le deuxième nombre : "))
+Entrez le deuxième nombre : 5
+>>> if operation == "+":
+...     resultat = nombre1 + nombre2
+... elif operation == "-":
+...     resultat = nombre1 - nombre2
+... elif operation == "*":
+...     resultat = nombre1 * nombre2
+... elif operation == "/":
+...     if nombre2 != 0:
+...         resultat = nombre1 / nombre2
+...     else:
+...         resultat = "Erreur : division par 0"
+... else:
+...     resultat = "Opération invalide"
+...
+>>> print("Résultat :", resultat)
+Résultat : 30.0
