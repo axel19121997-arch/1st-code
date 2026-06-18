@@ -1,0 +1,381 @@
+# projet Naheulbeuk 
+import tkinter as tk
+import random
+
+
+# 1. DONNÉES DU JEU
+
+races = ["Humain", "Ogre", "Elfe", "Thérianthropes", "Nain", "Elfe noir", "Orc"]
+
+# Classes avec arme de départ incluse
+classes_data = {
+    "Guerrier": {"bonus": "force", "valeur": 4, "sort": "Coup de Bouclier", "arme": {"nom": "Épée en fer blanc", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}},
+    "Évêque": {"bonus": "intelligence", "valeur": 4, "sort": "Soins Mineurs", "arme": {"nom": "Croix en bois lourd", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 1}},
+    "Mage": {"bonus": "intelligence", "valeur": 4, "sort": "Boule de Feu", "arme": {"nom": "Bâton tordu", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 2}},
+    "Assassin": {"bonus": "adresse", "valeur": 4, "sort": "Attaque Sournoise", "arme": {"nom": "Dague émoussée", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
+    "Paladin": {"bonus": "courage", "valeur": 4, "sort": "Justice Divine", "arme": {"nom": "Fléau rouillé", "rare": "Commun", "dmg": 4, "stat": "courage", "stat_val": 0}},
+    "Archer": {"bonus": "adresse", "valeur": 4, "sort": "Tir Précis", "arme": {"nom": "Arc en hif", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
+    "Menestrel": {"bonus": "tous", "valeur": 2, "sort": "Chanson Débile", "arme": {"nom": "Luth de combat", "rare": "Commun", "dmg": 2, "stat": "courage", "stat_val": 1}},
+    "Chaman": {"bonus": "courage", "valeur": 4, "sort": "Esprit Totem", "arme": {"nom": "Hachette en pierre", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}}
+}
+classes = list(classes_data.keys())
+
+# Tables de loot pour les coffres
+prefix_armes = ["Épée", "Hache", "Dague", "Masse", "Lance", "Bâton", "Arc", "Gourdin"]
+suffix_commun = ["rouillé(e)", "en toc", "de récupération", "fendu(e)"]
+suffix_rare = ["affuté(e) 🌟", "de Maître 🌟", "en Acier Nain 🌟", "Enchanté(e) 🌟"]
+suffix_legendaire = ["Démoniaque 🔥", "de Gurdil 🔥", "du Chaos 🔥", "Destructeur 🔥"]
+
+particularites = [
+    "Ne tient pas l'alcool", "Chante faux", "Déclenche tous les pièges",
+    "Stress élevé", "Perd son équipement", "Parle aux voix dans sa tête",
+    "BASTOOOOON", "Moa po savoire perlai", "Comprend vite mais à besoin de temps",
+    "Tape lentement mais fort", "Beau de loin mais loin d'être sûre"
+]
+
+noms_masculins = ["Albert", "Jean-kevin", "Alfred", "Norbert", "Sigmud", "Gorgir", "Bargor", "Phillipus", "Eudyr", "Mortanaelle"]
+noms_feminins = ["Mysti", "Andora", "Simonie", "Camillia", "Ingrid", "Isabella", "Monique", "Claudette", "Susette", "Mélissa"]
+surnoms_masculins = ["Le Puant", "Sans peur", "Le Trouillard", "Le Vénérable", "3 Pates", "Le Goinfre", "Terreur des Tavernes", "L'Assoiffé", "Le Destructeur", "Sans Renom"]
+surnoms_feminins = ["La Patronne", "La Sainte", "La Mystérieuse", "La Roublarde", "La Couarde", "La Puissante", "L'Assoupie", "La Guerrière", "Beautée Fatale", "La Sage"]
+
+monstres = [
+    {"nom": "Un Rat malodorant", "force": 6, "pv": 15},
+    {"nom": "Un guerrier Orc ", "force": 10, "pv": 32},
+    {"nom": "Un Gobelin sournois", "force": 8, "pv": 22},
+    {"nom": "Un Mort-pas vivant", "force": 7, "pv": 18},
+    {"nom": "Un Squelette grinçant", "force": 9, "pv": 26}
+    {"nom": "Un Mage noir naincestral", "force": 12, "pv": 17}
+    {"nom": "Un Chien de garde", "force": 6, "pv": 14}
+    {"nom": "Une Liche sombre", "force": 8, "pv": 34}
+]
+
+genre_selectionne = "Aléatoire"
+race_selectionnee = "Aléatoire"
+classe_selectionnee = "Aléatoire"
+
+heros = {}
+monstre_actuel = {}
+
+# 2. FONCTIONS DE SÉLECTION
+
+def choisir_genre(genre, bouton_clique):
+    global genre_selectionne
+    genre_selectionne = genre
+    for b in frame_genre.winfo_children(): b.config(bg="#f0f0f0", fg="black") 
+    bouton_clique.config(bg="gold", fg="black")
+
+def choisir_race(race, bouton_clique):
+    global race_selectionnee
+    race_selectionnee = race
+    for b in frame_race.winfo_children(): b.config(bg="#f0f0f0", fg="black")
+    bouton_clique.config(bg="#32cd32", fg="white") 
+
+def choisir_classe(classe, bouton_clique):
+    global classe_selectionnee
+    classe_selectionnee = classe
+    for b in frame_classe.winfo_children(): b.config(bg="#f0f0f0", fg="black")
+    bouton_clique.config(bg="#32cd32", fg="white")
+
+
+# 3. SYSTÈME DE JEU
+
+def generer_personnage():
+    global heros
+    nom_saisi = entree_nom.get().strip()
+
+    genre = random.choice(["homme", "femme"]) if genre_selectionne == "Aléatoire" else genre_selectionne
+
+    if nom_saisi == "":
+        prenom = random.choice(noms_masculins if genre == "homme" else noms_feminins)
+        surnom = random.choice(surnoms_masculins if genre == "homme" else surnoms_feminins)
+        nom = f"{prenom} {surnom}"
+    else:
+        nom = nom_saisi
+
+    race = random.choice(races) if race_selectionnee == "Aléatoire" else race_selectionnee
+    classe = random.choice(classes) if classe_selectionnee == "Aléatoire" else classe_selectionnee
+
+    courage = random.randint(8, 16)
+    intelligence = random.randint(8, 16)
+    force = random.randint(8, 16)
+    adresse = random.randint(8, 16)
+
+    info_classe = classes_data[classe]
+    if info_classe["bonus"] == "force": force += info_classe["valeur"]
+    elif info_classe["bonus"] == "intelligence": intelligence += info_classe["valeur"]
+    elif info_classe["bonus"] == "adresse": adresse += info_classe["valeur"]
+    elif info_classe["bonus"] == "courage": courage += info_classe["valeur"]
+    elif info_classe["bonus"] == "tous":
+        force += info_classe["valeur"]; intelligence += info_classe["valeur"]
+        adresse += info_classe["valeur"]; courage += info_classe["valeur"]
+
+    # Copie profonde de l'arme de départ
+    arme_depart = info_classe["arme"].copy()
+
+    heros = {
+        "nom": nom, "genre": genre, "race": race, "classe": classe,
+        "courage": courage, "intelligence": intelligence, "force": force, "adresse": adresse,
+        "pv": 50, "pv_max": 50,
+        "particularites": random.sample(particularites, 2),
+        "sort": info_classe["sort"],
+        "arme": arme_depart
+    }
+
+    rafraichir_affichage_heros()
+    btn_competence.config(text=f"✨ {heros['sort']}")
+    bouton_explorer.pack(pady=10)
+    frame_actions_combat.pack_forget()
+
+def rafraichir_affichage_heros():
+    # Calcul des stats effectives (Base + Arme)
+    f_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0
+    i_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0
+    a_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0
+    c_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0
+
+    # Rareté de l'arme couleur
+    rare_txt = f"[{heros['arme']['rare']}]"
+
+    texte = f"""📇 FICHE D'AVENTURIER 📇
+Nom : {heros['nom']} ({heros['genre']}) - {heros['race']} {heros['classe']}
+❤️ PV : {heros['pv']}/{heros['pv_max']}
+
+⚔ Courage : {heros['courage'] + c_bonus} ({heros['courage']}+{c_bonus})   🧠 Intelligence : {heros['intelligence'] + i_bonus} ({heros['intelligence']}+{i_bonus})
+💪 Force : {heros['force'] + f_bonus} ({heros['force']}+{f_bonus})     🏹 Adresse : {heros['adresse'] + a_bonus} ({heros['adresse']}+{a_bonus})
+
+⚔️ Arme Équipée : {heros['arme']['nom']} {rare_txt}
+   💥 Dégâts de l'arme : +{heros['arme']['dmg']} | 🌟 Bonus : +{heros['arme']['stat_val']} {heros['arme']['stat'].upper()}
+
+😂 Particularités : - {heros['particularites'][0]} | {heros['particularites'][1]}"""
+    resultat.config(text=texte)
+
+def explorer():
+    if heros.get("pv", 0) <= 0: return
+
+    evenement = random.choice(["combat", "combat", "coffre", "vide", "piege"])
+    
+    if evenement == "vide":
+        journal.config(text="Tu marches dans un couloir sombre. Ça sent les pieds. Rien ne se passe.", fg="white")
+    
+    elif evenement == "coffre":
+        generer_loot_coffre()
+        
+    elif evenement == "piege":
+        stat_adresse = heros["adresse"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0)
+        if random.randint(1, 25) < stat_adresse:
+            journal.config(text="Un piège se déclenche, mais grâce à ton ADRESSE, tu sautes par-dessus au dernier moment !", fg="lightgreen")
+        else:
+            degats = random.randint(6, 12)
+            heros["pv"] -= degats
+            journal.config(text=f"Tu as marché sur une dalle suspecte... Un dictionnaire te tombe dessus ! Tu perds {degats} PV.", fg="orange")
+            rafraichir_affichage_heros()
+            verifier_mort()
+
+    elif evenement == "combat":
+        commencer_combat()
+
+def generer_loot_coffre():
+    # Détermination de la rareté
+    chance = random.randint(1, 100)
+    if chance > 90:
+        rarete = "Légendaire"
+        nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_legendaire)}"
+        dmg = random.randint(10, 16)
+        stat_val = random.randint(4, 7)
+        couleur = "#ff4500" 
+    elif chance > 60:
+        rarete = "Rare"
+        nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_rare)}"
+        dmg = random.randint(5, 9)
+        stat_val = random.randint(2, 4)
+        couleur = "#1e90ff" 
+    else:
+        rarete = "Commun"
+        nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_commun)}"
+        dmg = random.randint(2, 4)
+        stat_val = random.randint(1, 2)
+        couleur = "white"
+
+    stat_attribuee = random.choice(["force", "intelligence", "adresse", "courage"])
+    
+    nouvelle_arme = {
+        "nom": nom_arme, "rare": rarete, "dmg": dmg, "stat": stat_attribuee, "stat_val": stat_val
+    }
+
+    # Remplacement automatique du butin
+    heros["arme"] = nouvelle_arme
+    
+    log = f"📦 COFFRE AU TRÉSOR ! Tu l'ouvres de façons hésitantes.\n"
+    log += f"Tu trouves : {nom_arme} [{rarete}]\n"
+    log += f"Stats : +{dmg} Dégâts de base | +{stat_val} {stat_attribuee.upper()}\n"
+    log += "Tu jettes ton ancienne arme sans aucun remords et tu équipes la nouvelle !"
+    
+    journal.config(text=log, fg=couleur)
+    rafraichir_affichage_heros()
+
+def commencer_combat():
+    global monstre_actuel
+    monstre_actuel = random.choice(monstres).copy()
+    journal.config(text=f"💥 ALERTE BASTON ! {monstre_actuel['nom']} surgit ! (PV: {monstre_actuel['pv']})", fg="red")
+    bouton_explorer.pack_forget()
+    frame_actions_combat.pack(pady=10)
+
+def riposte_monstre():
+    if monstre_actuel["pv"] > 0:
+        stat_force = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
+        degats_monstre = max(1, (random.randint(2, 6) + (monstre_actuel["force"] // 3)) - (stat_force // 6))
+        heros["pv"] -= degats_monstre
+        rafraichir_affichage_heros()
+        verifier_mort()
+        return f"\nLe monstre riposte et t'inflige {degats_monstre} dégâts !"
+    return ""
+
+def attaquer():
+    global monstre_actuel
+    stat_force = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
+    
+    # Dégâts calculés avec l'arme !
+    degats_heros = random.randint(3, 7) + (stat_force // 4) + heros["arme"]["dmg"]
+    monstre_actuel["pv"] -= degats_heros
+    log = f"Tu cognes plus ou moins fort avec ton outil ({heros['arme']['nom']}) et infliges {degats_heros} dégâts."
+    
+    if monstre_actuel["pv"] <= 0:
+        journal.config(text=log + f"\n🎉 VICTOIRE sur le {monstre_actuel['nom']enfin ce n'était pas si impressionnant} !", fg="lightgreen")
+        fin_combat()
+    else:
+        log += riposte_monstre()
+        journal.config(text=f"{log}\n({monstre_actuel['nom']} PV: {monstre_actuel['pv']})", fg="pink")
+
+def utiliser_competence():
+    global monstre_actuel
+    sort = heros["sort"]
+    log = ""
+    
+    # Récupération des stats effectives (Base + Arme)
+    sf = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
+    si = heros["intelligence"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0)
+    sc = heros["courage"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0)
+    
+    arme_bonus = heros["arme"]["dmg"]
+    
+    if sort == "Coup de Bouclier":
+        degats = random.randint(6, 12) + (sf // 3) + arme_bonus
+        monstre_actuel["pv"] -= degats
+        log = f"🛡️ Coup de Bouclier ! BASTON ! ({degats} dégâts)"
+        
+    elif sort == "Soins Mineurs":
+        soin = random.randint(10, 20) + (si // 3)
+        heros["pv"] = min(heros["pv_max"], heros["pv"] + soin)
+        log = f"✨ Tu lances un sort de soin et récupères {soin} PV !"
+        
+    elif sort == "Boule de Feu":
+        degats = random.randint(12, 24) + (si // 2) + (arme_bonus * 2)
+        monstre_actuel["pv"] -= degats
+        log = f"🔥 ÉNORME EXPLOSION DE FEU ! ({degats} dégâts)"
+        
+    elif sort == "Attaque Sournoise":
+        if random.choice([True, False]):
+            degats = 25 + arme_bonus
+            log = f"🗡️ CRITIQUE ! Dans le dos ! ({degats} dégâts)"
+        else:
+            degats = 5
+            log = f"🗡️ Raté... Tu as glissé sur une touffe d'herbe. (5 dégâts)"
+        monstre_actuel["pv"] -= degats
+        
+    elif sort == "Justice Divine":
+        degats = 8 + (sc // 4) + arme_bonus
+        soin = 6
+        monstre_actuel["pv"] -= degats
+        heros["pv"] = min(heros["pv_max"], heros["pv"] + soin)
+        log = f"⚖️ Justice ! Frappe ({degats} dégâts) et soin (+{soin} PV)."
+        
+    elif sort == "Tir Précis":
+        degats = 12 + arme_bonus
+        monstre_actuel["pv"] -= degats
+        log = f"🏹 Flèche transperçante ! ({degats} dégâts)"
+        
+    elif sort == "Chanson Débile":
+        degats = random.randint(1, 30) + arme_bonus
+        monstre_actuel["pv"] -= degats
+        log = f"🎵 Le monstre saigne des oreilles à cause de ta musique ! ({degats} dégâts)"
+        
+    elif sort == "Esprit Totem":
+        degats = random.randint(4, 10) + (sc // 2) + arme_bonus
+        monstre_actuel["pv"] -= degats
+        log = f"🦫 L'esprit du castor enragé te donne de la force ! ({degats} dégâts)"
+
+    if monstre_actuel["pv"] <= 0:
+        journal.config(text=log + f"\n🎉 Victoire sur le {monstre_actuel['nom']} !", fg="lightgreen")
+        fin_combat()
+    else:
+        log += riposte_monstre()
+        journal.config(text=f"{log}\n({monstre_actuel['nom']} PV: {monstre_actuel['pv']})", fg="pink")
+    rafraichir_affichage_heros()
+
+def fuir():
+    journal.config(text="Tu as fui comme un lâche, qui n'aurait pas honte !", fg="yellow")
+    fin_combat()
+
+def fin_combat():
+    frame_actions_combat.pack_forget()
+    if heros["pv"] > 0: bouton_explorer.pack(pady=10)
+
+def verifier_mort():
+    if heros["pv"] <= 0:
+        heros["pv"] = 0
+        rafraichir_affichage_heros()
+        journal.config(text="💀 T'es mort, c'est la fin de cette aventure. GAME OVER.", fg="red")
+        frame_actions_combat.pack_forget()
+        bouton_explorer.pack_forget()
+
+
+# 4. CRÉATION DE L'INTERFACE
+
+fenetre = tk.Tk()
+fenetre.title("Le Donjon de Naheulbeuk")
+fenetre.geometry("820x840")
+fenetre.configure(bg="#2d1b0f")
+
+tk.Label(fenetre, text="LE DONJON DE NAHEULBEUK", font=("Times New Roman", 24, "bold"), fg="gold", bg="#2d1b0f").pack(pady=10)
+
+# Sexe, Race, Classe, Nom
+frame_genre = tk.Frame(fenetre, bg="#2d1b0f"); frame_genre.pack()
+btn_homme = tk.Button(frame_genre, text="👨 Homme", command=lambda: choisir_genre("homme", btn_homme)); btn_homme.pack(side="left", padx=5)
+btn_femme = tk.Button(frame_genre, text="👩 Femme", command=lambda: choisir_genre("femme", btn_femme)); btn_femme.pack(side="left", padx=5)
+btn_rand_g = tk.Button(frame_genre, text="🎲 Aléatoire", bg="gold", command=lambda: choisir_genre("Aléatoire", btn_rand_g)); btn_rand_g.pack(side="left", padx=5)
+
+frame_race = tk.Frame(fenetre, bg="#2d1b0f"); frame_race.pack(pady=5)
+for race in races:
+    btn_r = tk.Button(frame_race, text=race, command=lambda r=race, b=None: choisir_race(r, b))
+    btn_r.config(command=lambda r=race, b=btn_r: choisir_race(r, b))
+    btn_r.pack(side="left", padx=2)
+btn_rand_r = tk.Button(frame_race, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_race("Aléatoire", btn_rand_r)); btn_rand_r.pack(side="left", padx=2)
+
+frame_classe = tk.Frame(fenetre, bg="#2d1b0f"); frame_classe.pack()
+for classe in classes:
+    btn_c = tk.Button(frame_classe, text=classe, command=lambda c=classe, b=None: choisir_classe(c, b))
+    btn_c.config(command=lambda c=classe, b=btn_c: choisir_classe(c, b))
+    btn_c.pack(side="left", padx=2)
+btn_rand_c = tk.Button(frame_classe, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_classe("Aléatoire", btn_rand_c)); btn_rand_c.pack(side="left", padx=2)
+
+frame_nom_creer = tk.Frame(fenetre, bg="#2d1b0f"); frame_nom_creer.pack(pady=10)
+entree_nom = tk.Entry(frame_nom_creer, width=20, font=("Arial", 12)); entree_nom.pack(side="left", padx=5)
+bouton_creer = tk.Button(frame_nom_creer, text="1. Créer Aventurier", font=("Arial", 11, "bold"), command=generer_personnage, bg="#8b4513", fg="white")
+bouton_creer.pack(side="left", padx=5)
+
+# Fiche & Journal
+resultat = tk.Label(fenetre, text="Crée un aventurier...", justify="left", anchor="w", fg="white", bg="#1a1009", font=("Courier New", 10), bd=2, relief="groove", padx=15, pady=10)
+resultat.pack(fill="x", padx=40, pady=5)
+
+bouton_explorer = tk.Button(fenetre, text="🥾 Avancer dans le Donjon", font=("Arial", 14, "bold"), command=explorer, bg="#4a7c59", fg="white")
+
+frame_actions_combat = tk.Frame(fenetre, bg="#2d1b0f")
+btn_attaquer = tk.Button(frame_actions_combat, text="⚔️ ATTAQUER", font=("Arial", 12, "bold"), bg="#8b0000", fg="white", width=12, command=attaquer); btn_attaquer.pack(side="left", padx=5)
+btn_competence = tk.Button(frame_actions_combat, text="✨ Compétence", font=("Arial", 12, "bold"), bg="#4b0082", fg="white", width=20, command=utiliser_competence); btn_competence.pack(side="left", padx=5)
+btn_fuir = tk.Button(frame_actions_combat, text="🏃 FUIR", font=("Arial", 12, "bold"), bg="orange", fg="black", width=10, command=fuir); btn_fuir.pack(side="left", padx=5)
+
+tk.Label(fenetre, text="📜 Journal du Donjon :", fg="gold", bg="#2d1b0f", font=("Arial", 11, "bold")).pack(pady=(10,0))
+journal = tk.Label(fenetre, text="Rien à signaler.", justify="center", font=("Arial", 12, "italic"), fg="grey", bg="#1a1009", height=5, width=72, wraplength=650)
+journal.pack(pady=5)
+
+fenetre.mainloop()
