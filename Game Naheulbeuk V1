@@ -2,12 +2,10 @@
 import tkinter as tk
 import random
 
-
 # 1. DONNÉES DU JEU
 
 races = ["Humain", "Ogre", "Elfe", "Thérianthropes", "Nain", "Elfe noir", "Orc"]
 
-# Classes avec arme de départ incluse
 classes_data = {
     "Guerrier": {"bonus": "force", "valeur": 4, "sort": "Coup de Bouclier", "arme": {"nom": "Épée en fer blanc", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}},
     "Évêque": {"bonus": "intelligence", "valeur": 4, "sort": "Soins Mineurs", "arme": {"nom": "Croix en bois lourd", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 1}},
@@ -20,7 +18,6 @@ classes_data = {
 }
 classes = list(classes_data.keys())
 
-# Tables de loot pour les coffres
 prefix_armes = ["Épée", "Hache", "Dague", "Masse", "Lance", "Bâton", "Arc", "Gourdin"]
 suffix_commun = ["rouillé(e)", "en toc", "de récupération", "fendu(e)"]
 suffix_rare = ["affuté(e) 🌟", "de Maître 🌟", "en Acier Nain 🌟", "Enchanté(e) 🌟"]
@@ -43,9 +40,9 @@ monstres = [
     {"nom": "Un guerrier Orc ", "force": 10, "pv": 32},
     {"nom": "Un Gobelin sournois", "force": 8, "pv": 22},
     {"nom": "Un Mort-pas vivant", "force": 7, "pv": 18},
-    {"nom": "Un Squelette grinçant", "force": 9, "pv": 26}
-    {"nom": "Un Mage noir naincestral", "force": 12, "pv": 17}
-    {"nom": "Un Chien de garde", "force": 6, "pv": 14}
+    {"nom": "Un Squelette grinçant", "force": 9, "pv": 26},
+    {"nom": "Un Mage noir naincestral", "force": 12, "pv": 17},
+    {"nom": "Un Chien de garde", "force": 6, "pv": 14},
     {"nom": "Une Liche sombre", "force": 8, "pv": 34}
 ]
 
@@ -109,7 +106,6 @@ def generer_personnage():
         force += info_classe["valeur"]; intelligence += info_classe["valeur"]
         adresse += info_classe["valeur"]; courage += info_classe["valeur"]
 
-    # Copie profonde de l'arme de départ
     arme_depart = info_classe["arme"].copy()
 
     heros = {
@@ -127,13 +123,11 @@ def generer_personnage():
     frame_actions_combat.pack_forget()
 
 def rafraichir_affichage_heros():
-    # Calcul des stats effectives (Base + Arme)
     f_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0
     i_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0
     a_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0
     c_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0
 
-    # Rareté de l'arme couleur
     rare_txt = f"[{heros['arme']['rare']}]"
 
     texte = f"""📇 FICHE D'AVENTURIER 📇
@@ -141,7 +135,7 @@ Nom : {heros['nom']} ({heros['genre']}) - {heros['race']} {heros['classe']}
 ❤️ PV : {heros['pv']}/{heros['pv_max']}
 
 ⚔ Courage : {heros['courage'] + c_bonus} ({heros['courage']}+{c_bonus})   🧠 Intelligence : {heros['intelligence'] + i_bonus} ({heros['intelligence']}+{i_bonus})
-💪 Force : {heros['force'] + f_bonus} ({heros['force']}+{f_bonus})     🏹 Adresse : {heros['adresse'] + a_bonus} ({heros['adresse']}+{a_bonus})
+💪 Force : {heros['force'] + f_bonus} ({heros['force']}+{f_bonus})      🏹 Adresse : {heros['adresse'] + a_bonus} ({heros['adresse']}+{a_bonus})
 
 ⚔️ Arme Équipée : {heros['arme']['nom']} {rare_txt}
    💥 Dégâts de l'arme : +{heros['arme']['dmg']} | 🌟 Bonus : +{heros['arme']['stat_val']} {heros['arme']['stat'].upper()}
@@ -175,7 +169,6 @@ def explorer():
         commencer_combat()
 
 def generer_loot_coffre():
-    # Détermination de la rareté
     chance = random.randint(1, 100)
     if chance > 90:
         rarete = "Légendaire"
@@ -202,7 +195,6 @@ def generer_loot_coffre():
         "nom": nom_arme, "rare": rarete, "dmg": dmg, "stat": stat_attribuee, "stat_val": stat_val
     }
 
-    # Remplacement automatique du butin
     heros["arme"] = nouvelle_arme
     
     log = f"📦 COFFRE AU TRÉSOR ! Tu l'ouvres de façons hésitantes.\n"
@@ -234,13 +226,12 @@ def attaquer():
     global monstre_actuel
     stat_force = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
     
-    # Dégâts calculés avec l'arme !
     degats_heros = random.randint(3, 7) + (stat_force // 4) + heros["arme"]["dmg"]
     monstre_actuel["pv"] -= degats_heros
     log = f"Tu cognes plus ou moins fort avec ton outil ({heros['arme']['nom']}) et infliges {degats_heros} dégâts."
     
     if monstre_actuel["pv"] <= 0:
-        journal.config(text=log + f"\n🎉 VICTOIRE sur le {monstre_actuel['nom']enfin ce n'était pas si impressionnant} !", fg="lightgreen")
+        journal.config(text=log + f"\n🎉 VICTOIRE sur {monstre_actuel['nom']} ! Enfin, ce n'était pas si impressionnant...", fg="lightgreen")
         fin_combat()
     else:
         log += riposte_monstre()
@@ -251,7 +242,6 @@ def utiliser_competence():
     sort = heros["sort"]
     log = ""
     
-    # Récupération des stats effectives (Base + Arme)
     sf = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
     si = heros["intelligence"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0)
     sc = heros["courage"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0)
@@ -305,7 +295,7 @@ def utiliser_competence():
         log = f"🦫 L'esprit du castor enragé te donne de la force ! ({degats} dégâts)"
 
     if monstre_actuel["pv"] <= 0:
-        journal.config(text=log + f"\n🎉 Victoire sur le {monstre_actuel['nom']} !", fg="lightgreen")
+        journal.config(text=log + f"\n🎉 Victoire sur {monstre_actuel['nom']} !", fg="lightgreen")
         fin_combat()
     else:
         log += riposte_monstre()
@@ -338,7 +328,6 @@ fenetre.configure(bg="#2d1b0f")
 
 tk.Label(fenetre, text="LE DONJON DE NAHEULBEUK", font=("Times New Roman", 24, "bold"), fg="gold", bg="#2d1b0f").pack(pady=10)
 
-# Sexe, Race, Classe, Nom
 frame_genre = tk.Frame(fenetre, bg="#2d1b0f"); frame_genre.pack()
 btn_homme = tk.Button(frame_genre, text="👨 Homme", command=lambda: choisir_genre("homme", btn_homme)); btn_homme.pack(side="left", padx=5)
 btn_femme = tk.Button(frame_genre, text="👩 Femme", command=lambda: choisir_genre("femme", btn_femme)); btn_femme.pack(side="left", padx=5)
@@ -346,14 +335,14 @@ btn_rand_g = tk.Button(frame_genre, text="🎲 Aléatoire", bg="gold", command=l
 
 frame_race = tk.Frame(fenetre, bg="#2d1b0f"); frame_race.pack(pady=5)
 for race in races:
-    btn_r = tk.Button(frame_race, text=race, command=lambda r=race, b=None: choisir_race(r, b))
+    btn_r = tk.Button(frame_race, text=race)
     btn_r.config(command=lambda r=race, b=btn_r: choisir_race(r, b))
     btn_r.pack(side="left", padx=2)
 btn_rand_r = tk.Button(frame_race, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_race("Aléatoire", btn_rand_r)); btn_rand_r.pack(side="left", padx=2)
 
 frame_classe = tk.Frame(fenetre, bg="#2d1b0f"); frame_classe.pack()
 for classe in classes:
-    btn_c = tk.Button(frame_classe, text=classe, command=lambda c=classe, b=None: choisir_classe(c, b))
+    btn_c = tk.Button(frame_classe, text=classe)
     btn_c.config(command=lambda c=classe, b=btn_c: choisir_classe(c, b))
     btn_c.pack(side="left", padx=2)
 btn_rand_c = tk.Button(frame_classe, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_classe("Aléatoire", btn_rand_c)); btn_rand_c.pack(side="left", padx=2)
@@ -363,7 +352,6 @@ entree_nom = tk.Entry(frame_nom_creer, width=20, font=("Arial", 12)); entree_nom
 bouton_creer = tk.Button(frame_nom_creer, text="1. Créer Aventurier", font=("Arial", 11, "bold"), command=generer_personnage, bg="#8b4513", fg="white")
 bouton_creer.pack(side="left", padx=5)
 
-# Fiche & Journal
 resultat = tk.Label(fenetre, text="Crée un aventurier...", justify="left", anchor="w", fg="white", bg="#1a1009", font=("Courier New", 10), bd=2, relief="groove", padx=15, pady=10)
 resultat.pack(fill="x", padx=40, pady=5)
 
