@@ -1,20 +1,21 @@
-# projet Naheulbeuk 
+# projet Naheulbeuk - Version Exploration à l'Aveugle
 import tkinter as tk
 import random
 
+
 # 1. DONNÉES DU JEU
 
-races = ["Humain", "Ogre", "Elfe", "Thérianthropes", "Nain", "Elfe noir", "Orc"]
+races = ["Humain", "Ogre", "Elfe", "Thérianthropes", "Nain", "Elfe noir", "Mort vivant", "Orc"]
 
 classes_data = {
-    "Guerrier": {"bonus": "force", "valeur": 4, "sort": "Coup de Bouclier", "arme": {"nom": "Épée en fer blanc", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}},
-    "Évêque": {"bonus": "intelligence", "valeur": 4, "sort": "Soins Mineurs", "arme": {"nom": "Croix en bois lourd", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 1}},
-    "Mage": {"bonus": "intelligence", "valeur": 4, "sort": "Boule de Feu", "arme": {"nom": "Bâton tordu", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 2}},
-    "Assassin": {"bonus": "adresse", "valeur": 4, "sort": "Attaque Sournoise", "arme": {"nom": "Dague émoussée", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
-    "Paladin": {"bonus": "courage", "valeur": 4, "sort": "Justice Divine", "arme": {"nom": "Fléau rouillé", "rare": "Commun", "dmg": 4, "stat": "courage", "stat_val": 0}},
-    "Archer": {"bonus": "adresse", "valeur": 4, "sort": "Tir Précis", "arme": {"nom": "Arc en hif", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
-    "Menestrel": {"bonus": "tous", "valeur": 2, "sort": "Chanson Débile", "arme": {"nom": "Luth de combat", "rare": "Commun", "dmg": 2, "stat": "courage", "stat_val": 1}},
-    "Chaman": {"bonus": "courage", "valeur": 4, "sort": "Esprit Totem", "arme": {"nom": "Hachette en pierre", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}}
+    "Guerrier": {"bonus": "force", "valeur": 4, "sort1": "Coup de Bouclier", "cout1": 10, "sort2": "Exécution", "cout2": 20, "arme": {"nom": "Épée en fer blanc", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}},
+    "Évêque": {"bonus": "intelligence", "valeur": 4, "sort1": "Soins Mineurs", "cout1": 10, "sort2": "Colère Divine", "cout2": 20, "arme": {"nom": "Croix en bois lourd", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 1}},
+    "Mage": {"bonus": "intelligence", "valeur": 4, "sort1": "Boule de Feu", "cout1": 12, "sort2": "Éclair Enchaîné", "cout2": 22, "arme": {"nom": "Bâton tordu", "rare": "Commun", "dmg": 2, "stat": "intelligence", "stat_val": 2}},
+    "Assassin": {"bonus": "adresse", "valeur": 4, "sort1": "Attaque Sournoise", "cout1": 8, "sort2": "Lame Toxique", "cout2": 15, "arme": {"nom": "Dague émoussée", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
+    "Paladin": {"bonus": "courage", "valeur": 4, "sort1": "Justice Divine", "cout1": 10, "sort2": "Bouclier Lumineux", "cout2": 18, "arme": {"nom": "Fléau rouillé", "rare": "Commun", "dmg": 4, "stat": "courage", "stat_val": 0}},
+    "Archer": {"bonus": "adresse", "valeur": 4, "sort1": "Tir Précis", "cout1": 8, "sort2": "Pluie de Flèches", "cout2": 18, "arme": {"nom": "Arc en hif", "rare": "Commun", "dmg": 3, "stat": "adresse", "stat_val": 1}},
+    "Menestrel": {"bonus": "tous", "valeur": 2, "sort1": "Chanson Débile", "cout1": 5, "sort2": "Flûte Insupportable", "cout2": 15, "arme": {"nom": "Luth de combat", "rare": "Commun", "dmg": 2, "stat": "courage", "stat_val": 1}},
+    "Chaman": {"bonus": "courage", "valeur": 4, "sort1": "Esprit Totem", "cout1": 10, "sort2": "Sort du Poulet", "cout2": 20, "arme": {"nom": "Hachette en pierre", "rare": "Commun", "dmg": 4, "stat": "force", "stat_val": 0}}
 }
 classes = list(classes_data.keys())
 
@@ -30,21 +31,18 @@ particularites = [
     "Tape lentement mais fort", "Beau de loin mais loin d'être sûre"
 ]
 
-noms_masculins = ["Albert", "Jean-kevin", "Alfred", "Norbert", "Sigmud", "Gorgir", "Bargor", "Phillipus", "Eudyr", "Mortanaelle"]
-noms_feminins = ["Mysti", "Andora", "Simonie", "Camillia", "Ingrid", "Isabella", "Monique", "Claudette", "Susette", "Mélissa"]
-surnoms_masculins = ["Le Puant", "Sans peur", "Le Trouillard", "Le Vénérable", "3 Pates", "Le Goinfre", "Terreur des Tavernes", "L'Assoiffé", "Le Destructeur", "Sans Renom"]
-surnoms_feminins = ["La Patronne", "La Sainte", "La Mystérieuse", "La Roublarde", "La Couarde", "La Puissante", "L'Assoupie", "La Guerrière", "Beautée Fatale", "La Sage"]
-
 monstres = [
-    {"nom": "Un Rat malodorant", "force": 6, "pv": 15},
-    {"nom": "Un guerrier Orc ", "force": 10, "pv": 32},
-    {"nom": "Un Gobelin sournois", "force": 8, "pv": 22},
-    {"nom": "Un Mort-pas vivant", "force": 7, "pv": 18},
-    {"nom": "Un Squelette grinçant", "force": 9, "pv": 26},
-    {"nom": "Un Mage noir naincestral", "force": 12, "pv": 17},
-    {"nom": "Un Chien de garde", "force": 6, "pv": 14},
-    {"nom": "Une Liche sombre", "force": 8, "pv": 34}
+    {"nom": "Un Rat Géant mutant", "force": 6, "pv": 15, "xp": 25},
+    {"nom": "Un Orc de compagnie", "force": 10, "pv": 32, "xp": 50},
+    {"nom": "Un Gobelin sournois", "force": 8, "pv": 22, "xp": 35},
+    {"nom": "Une Autruche de guerre", "force": 7, "pv": 18, "xp": 30},
+    {"nom": "Un Squelette grinçant", "force": 9, "pv": 26, "xp": 40}
 ]
+
+# Intitulés d'ambiance pour les boutons (pour masquer le contenu réel)
+phrases_gauche = ["La grande porte en fer", "Le tunnel de gauche", "Un couloir humide", "Une arche de pierre"]
+phrases_milieu = ["Continuer tout droit", "La trappe au sol", "La porte grinçante", "Le couloir principal"]
+phrases_droite = ["La porte dérobée", "Le passage de droite", "Un escalier suspect", "Une brèche dans le mur"]
 
 genre_selectionne = "Aléatoire"
 race_selectionnee = "Aléatoire"
@@ -52,6 +50,10 @@ classe_selectionnee = "Aléatoire"
 
 heros = {}
 monstre_actuel = {}
+chemins_proposes = []
+salle_actuelle = 0
+SALLES_AVANT_BOSS = 15
+
 
 # 2. FONCTIONS DE SÉLECTION
 
@@ -77,9 +79,9 @@ def choisir_classe(classe, bouton_clique):
 # 3. SYSTÈME DE JEU
 
 def generer_personnage():
-    global heros
+    global heros, salle_actuelle
+    salle_actuelle = 0
     nom_saisi = entree_nom.get().strip()
-
     genre = random.choice(["homme", "femme"]) if genre_selectionne == "Aléatoire" else genre_selectionne
 
     if nom_saisi == "":
@@ -92,124 +94,192 @@ def generer_personnage():
     race = random.choice(races) if race_selectionnee == "Aléatoire" else race_selectionnee
     classe = random.choice(classes) if classe_selectionnee == "Aléatoire" else classe_selectionnee
 
-    courage = random.randint(8, 16)
-    intelligence = random.randint(8, 16)
-    force = random.randint(8, 16)
-    adresse = random.randint(8, 16)
-
     info_classe = classes_data[classe]
-    if info_classe["bonus"] == "force": force += info_classe["valeur"]
-    elif info_classe["bonus"] == "intelligence": intelligence += info_classe["valeur"]
-    elif info_classe["bonus"] == "adresse": adresse += info_classe["valeur"]
-    elif info_classe["bonus"] == "courage": courage += info_classe["valeur"]
-    elif info_classe["bonus"] == "tous":
-        force += info_classe["valeur"]; intelligence += info_classe["valeur"]
-        adresse += info_classe["valeur"]; courage += info_classe["valeur"]
-
-    arme_depart = info_classe["arme"].copy()
+    force = random.randint(8, 16) + (info_classe["valeur"] if info_classe["bonus"] in ["force", "tous"] else 0)
+    intelligence = random.randint(8, 16) + (info_classe["valeur"] if info_classe["bonus"] in ["intelligence", "tous"] else 0)
+    adresse = random.randint(8, 16) + (info_classe["valeur"] if info_classe["bonus"] in ["adresse", "tous"] else 0)
+    courage = random.randint(8, 16) + (info_classe["valeur"] if info_classe["bonus"] in ["courage", "tous"] else 0)
 
     heros = {
         "nom": nom, "genre": genre, "race": race, "classe": classe,
         "courage": courage, "intelligence": intelligence, "force": force, "adresse": adresse,
-        "pv": 50, "pv_max": 50,
-        "particularites": random.sample(particularites, 2),
-        "sort": info_classe["sort"],
-        "arme": arme_depart
+        "pv": 50, "pv_max": 50, "mana": 30, "mana_max": 30, "niveau": 1, "xp": 0, "xp_requis": 100, "or": 20,
+        "particularites": random.sample(particularites, 2), "arme": info_classe["arme"].copy()
     }
 
     rafraichir_affichage_heros()
-    btn_competence.config(text=f"✨ {heros['sort']}")
-    bouton_explorer.pack(pady=10)
+    generer_choix_chemins()
     frame_actions_combat.pack_forget()
+    frame_taverne.pack_forget()
+    frame_evenement.pack_forget()
 
 def rafraichir_affichage_heros():
-    f_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0
-    i_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0
-    a_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0
-    c_bonus = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0
+    f_b = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0
+    i_b = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0
+    a_b = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0
+    c_b = heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0
 
-    rare_txt = f"[{heros['arme']['rare']}]"
+    texte = f"""📇 FICHE D'AVENTURIER (Niveau {heros['niveau']}) | 🏰 Salle : {salle_actuelle}/{SALLES_AVANT_BOSS} 📇
+Nom : {heros['nom']} - {heros['race']} {heros['classe']}
+❤️ PV : {heros['pv']}/{heros['pv_max']}     🧪 MANA : {heros['mana']}/{heros['mana_max']}     ✨ XP : {heros['xp']}/{heros['xp_requis']}     🪙 OR : {heros['or']} pièces
 
-    texte = f"""📇 FICHE D'AVENTURIER 📇
-Nom : {heros['nom']} ({heros['genre']}) - {heros['race']} {heros['classe']}
-❤️ PV : {heros['pv']}/{heros['pv_max']}
+⚔ Courage : {heros['courage'] + c_b} ({heros['courage']}+{c_b})   🧠 Intelligence : {heros['intelligence'] + i_b} ({heros['intelligence']}+{i_b})
+💪 Force : {heros['force'] + f_b} ({heros['force']}+{f_b})     🏹 Adresse : {heros['adresse'] + a_b} ({heros['adresse']}+{a_b})
 
-⚔ Courage : {heros['courage'] + c_bonus} ({heros['courage']}+{c_bonus})   🧠 Intelligence : {heros['intelligence'] + i_bonus} ({heros['intelligence']}+{i_bonus})
-💪 Force : {heros['force'] + f_bonus} ({heros['force']}+{f_bonus})      🏹 Adresse : {heros['adresse'] + a_bonus} ({heros['adresse']}+{a_bonus})
-
-⚔️ Arme Équipée : {heros['arme']['nom']} {rare_txt}
-   💥 Dégâts de l'arme : +{heros['arme']['dmg']} | 🌟 Bonus : +{heros['arme']['stat_val']} {heros['arme']['stat'].upper()}
-
-😂 Particularités : - {heros['particularites'][0]} | {heros['particularites'][1]}"""
+⚔️ Arme : {heros['arme']['nom']} [{heros['arme']['rare']}] (+{heros['arme']['dmg']} DMG | +{heros['arme']['stat_val']} {heros['arme']['stat'].upper()})"""
     resultat.config(text=texte)
 
-def explorer():
+# --- CONFIGURATION AVEUGLE DES EMBRANCHEMENTS ---
+def generer_choix_chemins():
+    global chemins_proposes, salle_actuelle
+    
+    frame_actions_combat.pack_forget()
+    frame_taverne.pack_forget()
+    frame_evenement.pack_forget()
+
     if heros.get("pv", 0) <= 0: return
 
-    evenement = random.choice(["combat", "combat", "coffre", "vide", "piege"])
-    
-    if evenement == "vide":
-        journal.config(text="Tu marches dans un couloir sombre. Ça sent les pieds. Rien ne se passe.", fg="white")
-    
-    elif evenement == "coffre":
-        generer_loot_coffre()
-        
-    elif evenement == "piege":
-        stat_adresse = heros["adresse"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0)
-        if random.randint(1, 25) < stat_adresse:
-            journal.config(text="Un piège se déclenche, mais grâce à ton ADRESSE, tu sautes par-dessus au dernier moment !", fg="lightgreen")
-        else:
-            degats = random.randint(6, 12)
-            heros["pv"] -= degats
-            journal.config(text=f"Tu as marché sur une dalle suspecte... Un dictionnaire te tombe dessus ! Tu perds {degats} PV.", fg="orange")
-            rafraichir_affichage_heros()
-            verifier_mort()
+    salle_actuelle += 1
+    rafraichir_affichage_heros()
 
-    elif evenement == "combat":
+    if salle_actuelle >= SALLES_AVANT_BOSS:
+        frame_chemins.pack_forget()
+        commencer_boss_final()
+        return
+
+    # Les coulisses : On génère le vrai contenu secrètement
+    types_salles = ["Combat", "Combat", "Événement", "Taverne", "Coffre", "Salle Vide"]
+    chemins_proposes = [random.choice(types_salles) for _ in range(3)]
+    
+    # L'affichage : Des textes d'ambiance purement flous !
+    btn_gauche.config(text=f"⬅️ {random.choice(phrases_gauche)}")
+    btn_milieu.config(text=f"⬆️ {random.choice(phrases_milieu)}")
+    btn_droite.config(text=f"➡️ {random.choice(phrases_droite)}")
+    
+    journal.config(text=f"La Compagnie fait face à trois directions différentes. Personne n'écoute les conseils de l'Elfe. Où allez-vous ?", fg="gold")
+    frame_chemins.pack(pady=10)
+
+def choisir_chemin(index):
+    global heros
+    frame_chemins.pack_forget()
+    choix = chemins_proposes[index]
+
+    if choix == "Combat":
         commencer_combat()
+    elif choix == "Coffre":
+        generer_loot_coffre()
+        btn_continuer_loot.pack(pady=5)
+    elif choix == "Salle Vide":
+        journal.config(text="🚪 Vous ouvrez la porte... C'est un placard à balais géant, complètement vide. Quel sens de l'orientation tragique !", fg="white")
+        btn_continuer_loot.pack(pady=5)
+    elif choix == "Taverne":
+        entrer_dans_taverne()
+    elif choix == "Événement":
+        declencher_evenement()
+
+# --- LIEUX ET ACTIONS ---
+def entrer_dans_taverne():
+    journal.config(text="🍻 SURPRISE ! Une Taverne clandestine ! 🍻\nUne odeur de bière et de graillon flotte dans l'air. Le tavernier vous dévisage.\n"
+                        "- Dormir sur un vieux paillasson (Coûte 15 pièces, rend tous tes PV)\n"
+                        "- Boire une bière tiède douteuse (Coûte 10 pièces, rend toute ta Mana)", fg="cyan")
+    frame_taverne.pack(pady=10)
+
+def taverne_action(choix):
+    if choix == "dormir":
+        if heros["or"] >= 15:
+            heros["or"] -= 15
+            heros["pv"] = heros["pv_max"]
+            journal.config(text="Tu as dormi 20 minutes avant de te faire voler ton oreiller. Tes PV sont au max !", fg="lightgreen")
+        else:
+            journal.config(text="Pas assez de pièces ! Le videur t'éjecte d'un coup de botte.", fg="orange")
+    elif choix == "biere":
+        if heros["or"] >= 10:
+            heros["or"] -= 10
+            heros["mana"] = heros["mana_max"]
+            journal.config(text="C'est amer, mais ton fluide magique est rechargé à bloc ! Mana restaurée.", fg="lightgreen")
+        else:
+            journal.config(text="Pas d'or, pas de picole !", fg="orange")
+    rafraichir_affichage_heros()
+
+def declencher_evenement():
+    journal.config(text="🚨 ÉVÉNEMENT : PATROUILLE EN VUE !\nDes Orcs de garde avancent en traînant des pieds dans le couloir adjacent.\n"
+                        "Que fait la Compagnie ?\n"
+                        "OPTION A : Tenter de s'esquiver en douce (Test d'ADRESSE)\n"
+                        "OPTION B : Charger en hurlant des insultes ! (Test de COURAGE)", fg="orange")
+    frame_evenement.pack(pady=10)
+
+def evenement_choix(option):
+    frame_evenement.pack_forget()
+    if option == "discret":
+        stat_eff = heros["adresse"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "adresse" else 0)
+        if random.randint(1, 20) <= stat_eff:
+            heros["xp"] += 20
+            journal.config(text="Incroyable, l'Ogre n'a fait aucun bruit. Vous passez inaperçus ! (+20 XP)", fg="lightgreen")
+            log_victoire_calculs(0, 20)
+            return
+        else:
+            degats = random.randint(10, 15)
+            heros["pv"] -= degats
+            journal.config(text=f"Le Voleur a trébuché sur un tabouret. Les Orcs vous tirent dessus avant de sonner l'alarme ! (-{degats} PV)", fg="red")
+            verifier_mort()
+    elif option == "baston":
+        stat_eff = heros["courage"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0)
+        if random.randint(1, 20) <= stat_eff:
+            butin = random.randint(15, 30)
+            heros["or"] += butin
+            journal.config(text=f"Votre folie furieuse les terrorise ! Ils lâchent leur bourse et détalent. (+{butin} pièces)", fg="lightgreen")
+        else:
+            degats = random.randint(8, 12)
+            heros["pv"] -= degats
+            journal.config(text=f"La charge rate lamentablement. Vous prenez quelques coups avant de les semer. (-{degats} PV)", fg="red")
+            verifier_mort()
+    
+    if heros["pv"] > 0:
+        btn_continuer_loot.config(text="🎒 Reprendre la route")
+        btn_continuer_loot.pack(pady=5)
 
 def generer_loot_coffre():
     chance = random.randint(1, 100)
     if chance > 90:
-        rarete = "Légendaire"
+        rarete, dmg, stat_val, couleur = "Légendaire", random.randint(10, 16), random.randint(4, 7), "#ff4500"
         nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_legendaire)}"
-        dmg = random.randint(10, 16)
-        stat_val = random.randint(4, 7)
-        couleur = "#ff4500" 
     elif chance > 60:
-        rarete = "Rare"
+        rarete, dmg, stat_val, couleur = "Rare", random.randint(5, 9), random.randint(2, 4), "#1e90ff"
         nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_rare)}"
-        dmg = random.randint(5, 9)
-        stat_val = random.randint(2, 4)
-        couleur = "#1e90ff" 
     else:
-        rarete = "Commun"
+        rarete, dmg, stat_val, couleur = "Commun", random.randint(2, 4), random.randint(1, 2), "white"
         nom_arme = f"{random.choice(prefix_armes)} {random.choice(suffix_commun)}"
-        dmg = random.randint(2, 4)
-        stat_val = random.randint(1, 2)
-        couleur = "white"
 
     stat_attribuee = random.choice(["force", "intelligence", "adresse", "courage"])
+    heros["arme"] = {"nom": nom_arme, "rare": rarete, "dmg": dmg, "stat": stat_attribuee, "stat_val": stat_val}
     
-    nouvelle_arme = {
-        "nom": nom_arme, "rare": rarete, "dmg": dmg, "stat": stat_attribuee, "stat_val": stat_val
-    }
-
-    heros["arme"] = nouvelle_arme
+    pieces = random.randint(10, 25)
+    heros["or"] += pieces
     
-    log = f"📦 COFFRE AU TRÉSOR ! Tu l'ouvres de façons hésitantes.\n"
-    log += f"Tu trouves : {nom_arme} [{rarete}]\n"
-    log += f"Stats : +{dmg} Dégâts de base | +{stat_val} {stat_attribuee.upper()}\n"
-    log += "Tu jettes ton ancienne arme sans aucun remords et tu équipes la nouvelle !"
-    
+    log = f"📦 SURPRISE ! Un Coffre poussiéreux se cachait là !\nTu l'équipes de force : {nom_arme} [{rarete}] (+{dmg} Dmg)\nButin supplémentaire : +{pieces} pièces d'or !"
     journal.config(text=log, fg=couleur)
     rafraichir_affichage_heros()
 
+# --- COMBAT ---
 def commencer_combat():
     global monstre_actuel
     monstre_actuel = random.choice(monstres).copy()
-    journal.config(text=f"💥 ALERTE BASTON ! {monstre_actuel['nom']} surgit ! (PV: {monstre_actuel['pv']})", fg="red")
-    bouton_explorer.pack_forget()
+    journal.config(text=f"💥 EMBUSCADE ! Un ennemi surgit de l'ombre !\nC'est : {monstre_actuel['nom']} ! (PV: {monstre_actuel['pv']})", fg="red")
+    configurer_boutons_combat()
+
+def commencer_boss_final():
+    global monstre_actuel
+    monstre_actuel = {"nom": "LE SORCIER ZANGDAR (BOSS FINAL) 👑", "force": 15, "pv": 80, "xp": 1000}
+    journal.config(text=f"👿 SALLE RITUELE : ZANGDAR t'attend au centre de la pièce !\n'Vous avez survécu jusque-là ?! Mourez, misérables asticots !' (PV: {monstre_actuel['pv']})", fg="gold")
+    configurer_boutons_combat()
+
+def configurer_boutons_combat():
+    info_c = classes_data[heros["classe"]]
+    btn_comp1.config(text=f"✨ {info_c['sort1']} ({info_c['cout1']}⭐)")
+    if heros["niveau"] >= 3:
+        btn_comp2.config(text=f"🔥 {info_c['sort2']} ({info_c['cout2']}⭐)", state="normal", bg="#4b0082")
+    else:
+        btn_comp2.config(text=f"🔒 {info_c['sort2']} (Niv 3)", state="disabled", bg="grey")
     frame_actions_combat.pack(pady=10)
 
 def riposte_monstre():
@@ -225,150 +295,177 @@ def riposte_monstre():
 def attaquer():
     global monstre_actuel
     stat_force = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
-    
     degats_heros = random.randint(3, 7) + (stat_force // 4) + heros["arme"]["dmg"]
     monstre_actuel["pv"] -= degats_heros
-    log = f"Tu cognes plus ou moins fort avec ton outil ({heros['arme']['nom']}) et infliges {degats_heros} dégâts."
+    log = f"Tu cognes de toutes tes forces ! {degats_heros} dégâts infligés."
     
     if monstre_actuel["pv"] <= 0:
-        journal.config(text=log + f"\n🎉 VICTOIRE sur {monstre_actuel['nom']} ! Enfin, ce n'était pas si impressionnant...", fg="lightgreen")
-        fin_combat()
+        gerer_victoire_combat()
     else:
         log += riposte_monstre()
         journal.config(text=f"{log}\n({monstre_actuel['nom']} PV: {monstre_actuel['pv']})", fg="pink")
 
-def utiliser_competence():
+def cast_sort(num_sort):
     global monstre_actuel
-    sort = heros["sort"]
+    info_c = classes_data[heros["classe"]]
+    nom_s = info_c["sort1"] if num_sort == 1 else info_c["sort2"]
+    cout = info_c["cout1"] if num_sort == 1 else info_c["cout2"]
+
+    if heros["mana"] < cout:
+        journal.config(text=f"❌ Énergie insuffisante !", fg="yellow")
+        return
+
+    heros["mana"] -= cout
     log = ""
-    
     sf = heros["force"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "force" else 0)
     si = heros["intelligence"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "intelligence" else 0)
     sc = heros["courage"] + (heros["arme"]["stat_val"] if heros["arme"]["stat"] == "courage" else 0)
-    
-    arme_bonus = heros["arme"]["dmg"]
-    
-    if sort == "Coup de Bouclier":
-        degats = random.randint(6, 12) + (sf // 3) + arme_bonus
-        monstre_actuel["pv"] -= degats
-        log = f"🛡️ Coup de Bouclier ! BASTON ! ({degats} dégâts)"
-        
-    elif sort == "Soins Mineurs":
-        soin = random.randint(10, 20) + (si // 3)
-        heros["pv"] = min(heros["pv_max"], heros["pv"] + soin)
-        log = f"✨ Tu lances un sort de soin et récupères {soin} PV !"
-        
-    elif sort == "Boule de Feu":
-        degats = random.randint(12, 24) + (si // 2) + (arme_bonus * 2)
-        monstre_actuel["pv"] -= degats
-        log = f"🔥 ÉNORME EXPLOSION DE FEU ! ({degats} dégâts)"
-        
-    elif sort == "Attaque Sournoise":
-        if random.choice([True, False]):
-            degats = 25 + arme_bonus
-            log = f"🗡️ CRITIQUE ! Dans le dos ! ({degats} dégâts)"
-        else:
-            degats = 5
-            log = f"🗡️ Raté... Tu as glissé sur une touffe d'herbe. (5 dégâts)"
-        monstre_actuel["pv"] -= degats
-        
-    elif sort == "Justice Divine":
-        degats = 8 + (sc // 4) + arme_bonus
-        soin = 6
-        monstre_actuel["pv"] -= degats
-        heros["pv"] = min(heros["pv_max"], heros["pv"] + soin)
-        log = f"⚖️ Justice ! Frappe ({degats} dégâts) et soin (+{soin} PV)."
-        
-    elif sort == "Tir Précis":
-        degats = 12 + arme_bonus
-        monstre_actuel["pv"] -= degats
-        log = f"🏹 Flèche transperçante ! ({degats} dégâts)"
-        
-    elif sort == "Chanson Débile":
-        degats = random.randint(1, 30) + arme_bonus
-        monstre_actuel["pv"] -= degats
-        log = f"🎵 Le monstre saigne des oreilles à cause de ta musique ! ({degats} dégâts)"
-        
-    elif sort == "Esprit Totem":
-        degats = random.randint(4, 10) + (sc // 2) + arme_bonus
-        monstre_actuel["pv"] -= degats
-        log = f"🦫 L'esprit du castor enragé te donne de la force ! ({degats} dégâts)"
+    ab = heros["arme"]["dmg"]
+
+    if nom_s == "Coup de Bouclier":
+        d = random.randint(6, 12) + (sf // 3) + ab; monstre_actuel["pv"] -= d; log = f"🛡️ Coup de Bouclier ! ({d} dégâts)"
+    elif nom_s == "Exécution":
+        d = random.randint(18, 30) + (sf // 2) + ab; monstre_actuel["pv"] -= d; log = f"🪓 EXÉCUTION ! ({d} dégâts)"
+    elif nom_s == "Soins Mineurs":
+        s = random.randint(12, 22) + (si // 3); heros["pv"] = min(heros["pv_max"], heros["pv"] + s); log = f"✨ Soin ! (+{s} PV)"
+    elif nom_s == "Colère Divine":
+        d = random.randint(10, 18) + (si // 4); s = 8; monstre_actuel["pv"] -= d; heros["pv"] = min(heros["pv_max"], heros["pv"] + s); log = f"⚡ Éclat Sacré ! ({d} dégâts)"
+    elif nom_s == "Boule de Feu":
+        d = random.randint(12, 24) + (si // 2) + (ab * 2); monstre_actuel["pv"] -= d; log = f"🔥 Boule de Feu ! ({d} dégâts)"
+    elif nom_s == "Éclair Enchaîné":
+        d = random.randint(25, 45) + si; monstre_actuel["pv"] -= d; log = f"⚡ GRANDE FOUDRE ! ({d} dégâts)"
+    elif nom_s == "Attaque Sournoise":
+        d = (25 + ab) if random.choice([True, False]) else 5; monstre_actuel["pv"] -= d; log = f"🗡️ Coup sournois ! ({d} dégâts)"
+    elif nom_s == "Lame Toxique":
+        d = 16 + (heros["adresse"] // 3); monstre_actuel["pv"] -= d; log = f"🧪 Lame Empoisonnée ! ({d} dégâts)"
+    elif nom_s == "Justice Divine":
+        d = 8 + (sc // 4) + ab; heros["pv"] = min(heros["pv_max"], heros["pv"] + 5); monstre_actuel["pv"] -= d; log = f"⚖️ Justice ! ({d} dégâts)"
+    elif nom_s == "Bouclier Lumineux":
+        s = random.randint(22, 35); heros["pv"] = min(heros["pv_max"], heros["pv"] + s); log = f"🛡️ Grand Soin Lumineux (+{s} PV) !"
+    elif nom_s == "Tir Précis":
+        d = 12 + ab; monstre_actuel["pv"] -= d; log = f"🏹 Flèche perforante. ({d} dégâts)"
+    elif nom_s == "Pluie de Flèches":
+        tirs = random.randint(3, 5); d = tirs * (4 + (heros["adresse"] // 5)); monstre_actuel["pv"] -= d; log = f"🏹 Pluie de flèches ! ({d} dégâts total)"
+    elif nom_s == "Chanson Débile":
+        d = random.randint(1, 30) + ab; monstre_actuel["pv"] -= d; log = f"🎵 Chanson débile ! ({d} dégâts)"
+    elif nom_s == "Flûte Insupportable":
+        d = random.randint(20, 50); monstre_actuel["pv"] -= d; log = f"🪈 Musique atroce ! ({d} dégâts)"
+    elif nom_s == "Esprit Totem":
+        d = random.randint(4, 10) + (sc // 2) + ab; monstre_actuel["pv"] -= d; log = f"🦫 Esprit du Castor ! ({d} dégâts)"
+    elif nom_s == "Sort du Poulet":
+        d = monstre_actuel["pv"] // 2 + 5; monstre_actuel["pv"] -= d; log = f"🐔 Métamorphose en Poulet ! (-{d} PV)"
 
     if monstre_actuel["pv"] <= 0:
-        journal.config(text=log + f"\n🎉 Victoire sur {monstre_actuel['nom']} !", fg="lightgreen")
-        fin_combat()
+        gerer_victoire_combat()
     else:
         log += riposte_monstre()
-        journal.config(text=f"{log}\n({monstre_actuel['nom']} PV: {monstre_actuel['pv']})", fg="pink")
+        journal.config(text=f"{log}\n({monstre_actuel['nom']} PV: {monstre_actuel['pv']})", fg="magenta")
     rafraichir_affichage_heros()
 
-def fuir():
-    journal.config(text="Tu as fui comme un lâche, qui n'aurait pas honte !", fg="yellow")
-    fin_combat()
-
-def fin_combat():
+def gerer_victoire_combat():
     frame_actions_combat.pack_forget()
-    if heros["pv"] > 0: bouton_explorer.pack(pady=10)
+    if "ZANGDAR" in monstre_actuel["nom"]:
+        journal.config(text="🏆 VICTOIRE SUPRÊME !!! 🏆\nZangdar mord la poussière ! Vous récupérez la Statuette de Gladeulfeurha ! L'histoire retiendra que vous étiez des bras cassés, mais des bras cassés riches !", fg="gold")
+        return
+    or_gagne = random.randint(5, 15)
+    heros["or"] += or_gagne
+    log_victoire_calculs(or_gagne, monstre_actuel["xp"])
+
+def log_victoire_calculs(or_gagne, xp_gagne):
+    heros["xp"] += xp_gagne
+    log = f"🎉 Le monstre s'effondre ! +{xp_gagne} XP | +{or_gagne} pièces d'or."
+    if heros["xp"] >= heros["xp_requis"]:
+        heros["niveau"] += 1; heros["xp"] -= heros["xp_requis"]
+        heros["pv_max"] += 10; heros["mana_max"] += 5
+        heros["pv"] = heros["pv_max"]; heros["mana"] = heros["mana_max"]
+        heros["force"] += 2; heros["intelligence"] += 2; heros["adresse"] += 2; heros["courage"] += 2
+        log += f"\n\n🌟 LEVEL UP !! Tu passes Niveau {heros['niveau']} ! Stats augmentées !"
+
+    journal.config(text=log, fg="lightgreen")
+    btn_continuer_loot.config(text="🎒 Continuer l'exploration")
+    btn_continuer_loot.pack(pady=5)
+
+def fermer_loot_et_avancer():
+    btn_continuer_loot.pack_forget()
+    generer_choix_chemins()
+
+def fuir():
+    journal.config(text="Tu as fui par la porte de derrière !", fg="yellow")
+    frame_actions_combat.pack_forget()
+    generer_choix_chemins()
 
 def verifier_mort():
     if heros["pv"] <= 0:
         heros["pv"] = 0
         rafraichir_affichage_heros()
-        journal.config(text="💀 T'es mort, c'est la fin de cette aventure. GAME OVER.", fg="red")
+        journal.config(text="💀 T'es mort. La Compagnie cherche un remplaçant sur l'intranet du Donjon.", fg="red")
         frame_actions_combat.pack_forget()
-        bouton_explorer.pack_forget()
+        frame_chemins.pack_forget()
+        frame_taverne.pack_forget()
+        frame_evenement.pack_forget()
 
 
 # 4. CRÉATION DE L'INTERFACE
 
 fenetre = tk.Tk()
 fenetre.title("Le Donjon de Naheulbeuk")
-fenetre.geometry("820x840")
+fenetre.geometry("850x920")
 fenetre.configure(bg="#2d1b0f")
 
-tk.Label(fenetre, text="LE DONJON DE NAHEULBEUK", font=("Times New Roman", 24, "bold"), fg="gold", bg="#2d1b0f").pack(pady=10)
+tk.Label(fenetre, text="LE DONJON DE NAHEULBEUK", font=("Times New Roman", 24, "bold"), fg="gold", bg="#2d1b0f").pack(pady=5)
 
 frame_genre = tk.Frame(fenetre, bg="#2d1b0f"); frame_genre.pack()
 btn_homme = tk.Button(frame_genre, text="👨 Homme", command=lambda: choisir_genre("homme", btn_homme)); btn_homme.pack(side="left", padx=5)
 btn_femme = tk.Button(frame_genre, text="👩 Femme", command=lambda: choisir_genre("femme", btn_femme)); btn_femme.pack(side="left", padx=5)
 btn_rand_g = tk.Button(frame_genre, text="🎲 Aléatoire", bg="gold", command=lambda: choisir_genre("Aléatoire", btn_rand_g)); btn_rand_g.pack(side="left", padx=5)
 
-frame_race = tk.Frame(fenetre, bg="#2d1b0f"); frame_race.pack(pady=5)
+frame_race = tk.Frame(fenetre, bg="#2d1b0f"); frame_race.pack(pady=4)
 for race in races:
-    btn_r = tk.Button(frame_race, text=race)
-    btn_r.config(command=lambda r=race, b=btn_r: choisir_race(r, b))
-    btn_r.pack(side="left", padx=2)
+    btn_r = tk.Button(frame_race, text=race); btn_r.config(command=lambda r=race, b=btn_r: choisir_race(r, b)); btn_r.pack(side="left", padx=2)
 btn_rand_r = tk.Button(frame_race, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_race("Aléatoire", btn_rand_r)); btn_rand_r.pack(side="left", padx=2)
 
 frame_classe = tk.Frame(fenetre, bg="#2d1b0f"); frame_classe.pack()
 for classe in classes:
-    btn_c = tk.Button(frame_classe, text=classe)
-    btn_c.config(command=lambda c=classe, b=btn_c: choisir_classe(c, b))
-    btn_c.pack(side="left", padx=2)
+    btn_c = tk.Button(frame_classe, text=classe); btn_c.config(command=lambda c=classe, b=btn_c: choisir_classe(c, b)); btn_c.pack(side="left", padx=2)
 btn_rand_c = tk.Button(frame_classe, text="🎲 Random", bg="#32cd32", fg="white", command=lambda: choisir_classe("Aléatoire", btn_rand_c)); btn_rand_c.pack(side="left", padx=2)
 
-frame_nom_creer = tk.Frame(fenetre, bg="#2d1b0f"); frame_nom_creer.pack(pady=10)
-entree_nom = tk.Entry(frame_nom_creer, width=20, font=("Arial", 12)); entree_nom.pack(side="left", padx=5)
-bouton_creer = tk.Button(frame_nom_creer, text="1. Créer Aventurier", font=("Arial", 11, "bold"), command=generer_personnage, bg="#8b4513", fg="white")
-bouton_creer.pack(side="left", padx=5)
+frame_nom_creer = tk.Frame(fenetre, bg="#2d1b0f"); frame_nom_creer.pack(pady=5)
+noms_masculins = ["Albert", "Jean-kevin", "Alfred", "Norbert", "Sigmud", "Gorgir", "Bargor"]
+noms_feminins = ["Mysti", "Andora", "Simonie", "Camillia", "Ingrid", "Isabella", "Monique"]
+surnoms_masculins = ["Le Puant", "Sans peur", "Le Trouillard", "Le Vénérable", "Le Goinfre"]
+surnoms_feminins = ["La Patronne", "La Sainte", "La Mystérieuse", "La Roublarde", "La Couarde"]
 
-resultat = tk.Label(fenetre, text="Crée un aventurier...", justify="left", anchor="w", fg="white", bg="#1a1009", font=("Courier New", 10), bd=2, relief="groove", padx=15, pady=10)
+entree_nom = tk.Entry(frame_nom_creer, width=20, font=("Arial", 12)); entree_nom.pack(side="left", padx=5)
+bouton_creer = tk.Button(frame_nom_creer, text="⚔️ Lancer l'Aventure", font=("Arial", 11, "bold"), command=generer_personnage, bg="#8b4513", fg="white"); bouton_creer.pack(side="left", padx=5)
+
+resultat = tk.Label(fenetre, text="Configure ton héros...", justify="left", anchor="w", fg="white", bg="#1a1009", font=("Courier New", 10), bd=2, relief="groove", padx=15, pady=8)
 resultat.pack(fill="x", padx=40, pady=5)
 
-bouton_explorer = tk.Button(fenetre, text="🥾 Avancer dans le Donjon", font=("Arial", 14, "bold"), command=explorer, bg="#4a7c59", fg="white")
+# Les Embranchements Aveugles
+frame_chemins = tk.Frame(fenetre, bg="#2d1b0f")
+btn_gauche = tk.Button(frame_chemins, text="Gauche", font=("Arial", 10, "bold"), bg="#5c3a21", fg="white", width=24, height=3, command=lambda: choisir_chemin(0)); btn_gauche.pack(side="left", padx=5)
+btn_milieu = tk.Button(frame_chemins, text="Tout Droit", font=("Arial", 10, "bold"), bg="#5c3a21", fg="white", width=24, height=3, command=lambda: choisir_chemin(1)); btn_milieu.pack(side="left", padx=5)
+btn_droite = tk.Button(frame_chemins, text="Droite", font=("Arial", 10, "bold"), bg="#5c3a21", fg="white", width=24, height=3, command=lambda: choisir_chemin(2)); btn_droite.pack(side="left", padx=5)
+
+frame_taverne = tk.Frame(fenetre, bg="#2d1b0f")
+tk.Button(frame_taverne, text="🛏️ Dormir (15 Or)", font=("Arial", 11, "bold"), bg="#cd853f", command=lambda: taverne_action("dormir")).pack(side="left", padx=10)
+tk.Button(frame_taverne, text="🍺 Boire une Bière (10 Or)", font=("Arial", 11, "bold"), bg="#b8860b", command=lambda: taverne_action("biere")).pack(side="left", padx=10)
+tk.Button(frame_taverne, text="❌ Reprendre la route", font=("Arial", 11, "bold"), bg="grey", command=fermer_loot_et_avancer).pack(side="left", padx=10)
+
+frame_evenement = tk.Frame(fenetre, bg="#2d1b0f")
+tk.Button(frame_evenement, text="👟 Option A : Discrétion", font=("Arial", 11, "bold"), bg="#708090", fg="white", command=lambda: evenement_choix("discret")).pack(side="left", padx=10)
+tk.Button(frame_evenement, text="🪓 Option B : Foncer dans le tas", font=("Arial", 11, "bold"), bg="#b22222", fg="white", command=lambda: evenement_choix("baston")).pack(side="left", padx=10)
 
 frame_actions_combat = tk.Frame(fenetre, bg="#2d1b0f")
-btn_attaquer = tk.Button(frame_actions_combat, text="⚔️ ATTAQUER", font=("Arial", 12, "bold"), bg="#8b0000", fg="white", width=12, command=attaquer); btn_attaquer.pack(side="left", padx=5)
-btn_competence = tk.Button(frame_actions_combat, text="✨ Compétence", font=("Arial", 12, "bold"), bg="#4b0082", fg="white", width=20, command=utiliser_competence); btn_competence.pack(side="left", padx=5)
-btn_fuir = tk.Button(frame_actions_combat, text="🏃 FUIR", font=("Arial", 12, "bold"), bg="orange", fg="black", width=10, command=fuir); btn_fuir.pack(side="left", padx=5)
+btn_att = tk.Button(frame_actions_combat, text="⚔️ ATTAQUER", font=("Arial", 11, "bold"), bg="#8b0000", fg="white", width=11, command=attaquer); btn_att.pack(side="left", padx=3)
+btn_comp1 = tk.Button(frame_actions_combat, text="✨ Sort 1", font=("Arial", 11, "bold"), bg="#4b0082", fg="white", width=18, command=lambda: cast_sort(1)); btn_comp1.pack(side="left", padx=3)
+btn_comp2 = tk.Button(frame_actions_combat, text="🔒 Sort 2", font=("Arial", 11, "bold"), bg="grey", fg="white", width=18, command=lambda: cast_sort(2)); btn_comp2.pack(side="left", padx=3)
+btn_f = tk.Button(frame_actions_combat, text="🏃 FUIR", font=("Arial", 11, "bold"), bg="orange", fg="black", width=8, command=fuir); btn_f.pack(side="left", padx=3)
 
-tk.Label(fenetre, text="📜 Journal du Donjon :", fg="gold", bg="#2d1b0f", font=("Arial", 11, "bold")).pack(pady=(10,0))
-journal = tk.Label(fenetre, text="Rien à signaler.", justify="center", font=("Arial", 12, "italic"), fg="grey", bg="#1a1009", height=5, width=72, wraplength=650)
+btn_continuer_loot = tk.Button(fenetre, text="🎒 Continuer", font=("Arial", 12, "bold"), bg="#4a7c59", fg="white", command=fermer_loot_et_avancer)
+
+tk.Label(fenetre, text="📜 Journal d'Aventure :", fg="gold", bg="#2d1b0f", font=("Arial", 11, "bold")).pack(pady=(10,0))
+journal = tk.Label(fenetre, text="Crée un aventurier pour ouvrir les portes du donjon.", justify="center", font=("Arial", 11, "italic"), fg="grey", bg="#1a1009", height=6, width=78, wraplength=720)
 journal.pack(pady=5)
-
-fenetre.mainloop()
-)
-
-resultat.pack(padx=20, pady=20)
 
 fenetre.mainloop()
