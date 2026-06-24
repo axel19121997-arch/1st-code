@@ -1,57 +1,59 @@
-🏰 Projet Mini-RPG - Le Donjon de Naheulbeuk
-Bienvenue dans le dépôt de mon tout premier projet de jeu vidéo ! C'est un mini-RPG textuel avec interface graphique, développé en Python et inspiré de l'univers déjanté et humoristique de la célèbre saga audio Le Donjon de Naheulbeuk.
+Mini-RPG Project - Le Donjon de Naheulbeuk
 
-Ce projet s'inscrit dans le cadre de mon apprentissage autodidacte de la programmation, de Python et de la gestion d'interfaces graphiques (GUI).
+Welcome to the repository of my very first video game project! This is a text-based mini-RPG with a graphical user interface (GUI), developed in Python and inspired by the crazy and humorous universe of the famous French audio saga *Le Donjon de Naheulbeuk*.
 
-🚀 Fonctionnalités actuelles
-Création de personnage complète : Personnalisation ou génération aléatoire du sexe, de la race (Humain, Elfe, Ogre, Nain, etc.) et de la classe (Guerrier, Mage, Ménestrel, Chaman...).
+This project is part of my self-taught learning journey into programming, Python development, and Graphical User Interface (GUI) management.
 
-Système de statistiques dynamique : Gestion des caractéristiques (Courage, Force, Intelligence, Adresse) influencées par la classe et l'équipement.
+---
 
-Exploration procédurale : Progression à travers 20 salles générées aléatoirement (pièges à esquiver, marchands, fontaines magiques).
+# Current Features
 
-Taverne du Donjon : Événement de repos pour dépenser son or, restaurer ses PV (Points de Vie) ou sa Mana.
+* **Complete Character Creation:** Customize or randomly generate your character's gender, race (Human, Elf, Ogre, Dwarf, etc.), and class (Warrior, Mage, Minstrel, Shaman...).
+* **Dynamic Stats System:** Core attributes (Courage, Strength, Intelligence, Agility) are directly influenced by your chosen class and equipped gear.
+* **Procedural Exploration:** Progress through 20 randomly generated rooms featuring traps to dodge, wandering merchants, and magical fountains.
+* **The Dungeon Tavern:** A rest event where you can spend your gold to restore your HP (Health Points) or Mana.
+* **Turn-Based Combat:** Fight a diverse bestiary (from Smelly Rats to Cave Trolls) leading up to the mythical final boss battle against Zangdar.
+* **Unique Skills & Spells:** Two special abilities per class, including a devastating ultimate skill that unlocks automatically upon reaching Level 2.
+* **Loot & Inventory Management:** Open treasure chests containing weapons of varying rarities (Common, Rare, Legendary) that instantly modify your stats.
+* **Text-Based RP Events:** Integrated humor and situational choices when encountering Orc patrols (featuring iconic battle cries).
 
-Combats au tour par tour : Affrontements contre un bestiaire varié (du Rat malodorant au Troll des cavernes) jusqu'au mythique combat final contre Zangdar.
+---
 
-Compétences & Sorts uniques : Deux capacités spéciales par classe, dont une destructrice se débloquant automatiquement lors du passage au niveau 2.
+# Visuals & Media
 
-Gestion du Butin (Loot) : Ouverture de coffres au trésor contenant des armes de rareté différente (Commun, Rare, Légendaire) modifiant directement vos statistiques.
+The game features dynamic image displays to mark the end of a playthrough. *Note: I am aware of a minor display bug regarding images and am currently working on a fix!*
 
-Événements textuels & RP : Intégration de traits humoristiques ("Chante faux", "BASTOOOOON") et choix situationnels face aux patrouilles d'Orcs.
+* **`victoire.png`**: Proudly displayed when you defeat Zangdar and recover the twelfth Statuette of Gladeulfeurha.
+* **`gameover.png`**: Displayed to honor the tragic demise of your party if your HP drops to zero.
 
-🎨 Visuels et Médias
-Le jeu intègre un affichage dynamique d'illustrations pour marquer les fins de parties, j'ai conscience du bug d'affichage concernant les images mais je compte travaillais dessus pour le corriger :
+>  **Important Note:** For images to render correctly within the interface, `victoire.png` and `gameover.png` must be placed in the exact same directory as the main Python script.
 
-🏆 victoire.png : S'affiche fièrement lorsque vous terrassez Zangdar et récupérez la douzième statuette de Gladeulfeurha.
+---
 
-💀 gameover.png : S'affiche pour saluer la triste fin de votre compagnie si vos PV tombent à zéro.
+# Tech Stack
 
-⚠️ Note importante : Pour que les images s'affichent correctement dans l'interface, les fichiers victoire.png et gameover.png doivent impérativement être placés dans le même dossier que le script Python principal.
+* **Language:** Python 3
+* **Standard Libraries:** `tkinter` (GUI), `random`, `os`
+* **Third-Party Library:** `Pillow` (PIL) for smooth PNG image processing and resizing.
+* **Tools:** Git & GitHub for version control.
 
-🛠️ Technologies utilisées
-Langage : Python 3
+---
 
-Bibliothèques standards : tkinter (Interface graphique), random, os
+# How to Run the Project
 
-Bibliothèque tierce : Pillow (PIL) pour la gestion et le redimensionnement fluide des images PNG.
+To test the game on your local machine, follow these steps:
 
-Outils : Git & GitHub pour le versioning.
-
-📦 Comment lancer le projet ?
-Pour tester le jeu sur votre machine, suivez ces étapes :
-
-1. Cloner le projet
-Bash
-git clone https://github.com/axel19121997-arch/1st-code.git
+# Clone the repository
+```bash
+git clone [https://github.com/axel19121997-arch/1st-code.git](https://github.com/axel19121997-arch/1st-code.git)
 cd 1st-code
-2. Installer les dépendances (requis pour les images)
-L'affichage des illustrations de fin nécessite la bibliothèque Pillow. Installez-la via votre terminal :
+2. Install dependencies
+Rendering the end-game illustrations requires the Pillow library. Install it via your terminal:
 
 Bash
 pip install Pillow
-3. Exécuter le jeu
-Lancez le script principal avec Python :
+3. Run the game
+Launch the main script using Python:
 
 Bash
 python "Jeu final.py"
